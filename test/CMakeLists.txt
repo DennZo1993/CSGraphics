@@ -72,7 +72,8 @@ if (("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang") OR
 endif()
 
 # Testing project
-SET(TEST_SOURCES main.cpp)
+SET(TEST_SOURCES main.cpp
+                 RGBAPixel.cpp)
 
 ADD_EXECUTABLE(Tests ${TEST_SOURCES})
 

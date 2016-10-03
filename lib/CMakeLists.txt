@@ -1,4 +1,5 @@
-set (SOURCES lodepng/lodepng.cpp)
+set (SOURCES lodepng/lodepng.cpp
+             RGBAPixel.cpp)
 
 add_library(libSolver STATIC ${SOURCES})
 
