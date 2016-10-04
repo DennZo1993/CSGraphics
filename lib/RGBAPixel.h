@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <stdexcept>
 
 // Class representing 3-channel pixel in RGB model + alpha channel.
 // Ordering is straight: R,G,B,A (sufficient for [] operators).
