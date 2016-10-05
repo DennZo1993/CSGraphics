@@ -73,7 +73,8 @@ endif()
 
 # Testing project
 SET(TEST_SOURCES main.cpp
-                 RGBAPixel.cpp)
+                 RGBAPixel.cpp
+                 ImageTest.cpp)
 
 ADD_EXECUTABLE(Tests ${TEST_SOURCES})
 
