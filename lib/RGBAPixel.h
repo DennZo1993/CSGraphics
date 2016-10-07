@@ -52,5 +52,12 @@ public:
 private:
   static constexpr PixelType MIN_VALUE = 0;
   static constexpr PixelType MAX_VALUE = 255;
+
+public:
+  static const RGBAPixel PureBlack;
+  static const RGBAPixel PureWhite;
+  static const RGBAPixel PureRed;
+  static const RGBAPixel PureGreen;
+  static const RGBAPixel PureBlue;
 };
 

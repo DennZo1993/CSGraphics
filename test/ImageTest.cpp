@@ -89,5 +89,5 @@ TEST(Image, MatchingOperation) {
   img[3] = 4;
 
   ASSERT_EQ(4, img(1, 1));
-  ASSERT_EQ(img[2], img(1, 0)); 
+  ASSERT_EQ(img[2], img(1, 0));
 }

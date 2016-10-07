@@ -1,5 +1,13 @@
 #include "RGBAPixel.h"
 
+
+const RGBAPixel RGBAPixel::PureBlack = RGBAPixel(0  , 0  , 0  , 255);
+const RGBAPixel RGBAPixel::PureWhite = RGBAPixel(255, 255, 255, 255);
+const RGBAPixel RGBAPixel::PureRed   = RGBAPixel(255, 0  , 0  , 255);
+const RGBAPixel RGBAPixel::PureGreen = RGBAPixel(0  , 255, 0  , 255);
+const RGBAPixel RGBAPixel::PureBlue  = RGBAPixel(0  , 0  , 255, 255);
+
+
 RGBAPixel::PixelType& RGBAPixel::operator[](size_t i) {
   switch (i) {
   case 0: return r;
@@ -76,3 +84,4 @@ RGBAPixel operator-(RGBAPixel lhs, const RGBAPixel &rhs) {
   lhs -= rhs;
   return lhs;
 }
+

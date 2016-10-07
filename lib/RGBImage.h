@@ -3,6 +3,6 @@
 #include "Image.h"
 #include "RGBAPixel.h"
 
-class RGBImage : public Image<RGBAPixel> {
 
-};
+using RGBImage = Image<RGBAPixel>;
+

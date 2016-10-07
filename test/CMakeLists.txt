@@ -74,7 +74,8 @@ endif()
 # Testing project
 SET(TEST_SOURCES main.cpp
                  RGBAPixel.cpp
-                 ImageTest.cpp)
+                 ImageTest.cpp
+                 ImageRetriever/FileImageRetrieverTest.cpp)
 
 ADD_EXECUTABLE(Tests ${TEST_SOURCES})
 
