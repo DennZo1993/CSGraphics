@@ -8,8 +8,6 @@
 #include <chrono>
 #include <fstream>
 
-#include "lodepng/lodepng.h"
-
 
 template <class T>
 class Image {
@@ -39,14 +37,7 @@ public:
   }
 
 
-  // Construct new image and read it from file.
-  Image(const std::string &fileName)
-    : data(nullptr), Height(0), Width(0) {
-    ReadFromFile(fileName);
-  }
-
-
-  ~Image() {
+  virtual ~Image() {
     Destroy();
   }
 
@@ -97,7 +88,7 @@ public:
       data[i] = other[i];
   }
 
-private:
+protected:
 
   // Free allocated memory. Set dimensions to 0, data to nullptr.
   void Destroy() {
@@ -142,85 +133,27 @@ public:
 
 public:
 
-  // Reads the file as whitespace-separated plain text image.
+  // Reads the input stream as plain text image.
   // Extension of the file name is NOT considered!
-  // Throws std ios exceptions.
   //
-  // File format:
-  //   * The first row contains 2 integers: height and width respectively;
-  //   * Next <height> lines contains <width> numbers each, separated by a
-  //   * whitespace.
-  void ReadFromPlainText(const std::string &fileName) {
-    std::ifstream ifs;
-    ifs.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    ifs.open(fileName);
-
-    if (!ifs.good())
-      return;
-
-    ifs >> *this;
-    ifs.close();
-  }
-
-
-
-#if 0
-  // Reads the file as PNG image.
-  // Extension of the file name is NOT considered!
-  // Throws std::runtime_error.
-  void ReadFromPNG(const std::string &fileName) {
-    std::vector<unsigned char> png;
-    std::vector<unsigned char> image;
-    unsigned width = 0, height = 0;
-
-    if (lodepng::load_file(png, fileName))
-      throw std::runtime_error("Error loaing PNG file " + fileName);
-    if (lodepng::decode(image, width, height, png))
-      throw std::runtime_error("Error decoding PNG file " + fileName);
-
-    // Construct new Image. Convert RGB to grayscale.
-    Allocate(height, width);
-
-    for (size_t y = 0; y < height; ++y) {
-      for (size_t x = 0; x < width; ++x) {
-        auto R = image[4 * width * y + 4 * x + 0];
-        auto G = image[4 * width * y + 4 * x + 1];
-        auto B = image[4 * width * y + 4 * x + 2];
-        auto gray = (R * 0.3) + (G * 0.59) + (B * 0.11);
-        data[y][x] = gray;
-      }
-    }
-  }
-#endif
-
-
-  // Based on file extension reads the file as plain text, PNG, etc.
-  // Throws std::runtime_error, std ios exceptions.
-  void ReadFromFile(const std::string &fileName) {
-#if 0
-    if (fileNameHasExtension(fileName, ".png"))
-      ReadFromPNG(fileName);
-    else
-#endif
-    ReadFromPlainText(fileName);
-  }
-
-// Stream I/O.
-
-
-  // Throws sts::bad_alloc, std::invalid_argument.
+  // Format:
+  //   * 2 integers: height and width respectively;
+  //   * <height>*<width> values separated by a whitespace.
+  //
+  // Throws sts::bad_alloc, std::invalid_argument, std ios exceptions.
   friend std::istream &operator >>(std::istream &is, Image<T> &m) {
     std::ios_base::sync_with_stdio(false);
-    is.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    is.exceptions(std::ios_base::failbit | std::ios_base::badbit);
     // Signed int to avoid reading negative numbers.
     long h = 0, w = 0;
     is >> h >> w;
-
     // If we couldn't read both height and width, exception had been thrown.
 
     m.Allocate(h, w);
 
-    for (size_t i = 0; i < h * w; ++i) {
+    // Here we safely cast to size_t, because negative h or w must have resulted
+    // in exception in Allocate().
+    for (size_t i = 0; i < static_cast<size_t>(h * w); ++i) {
         // If stream containes less data than declared - stop reading.
         if (!is.good())
           break;
@@ -234,12 +167,11 @@ public:
 
   friend std::ostream &operator <<(std::ostream &os, const Image<T> &m) {
     std::ios_base::sync_with_stdio(false);
-    os.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    os.exceptions(std::ios_base::failbit | std::ios_base::badbit);
 
     os << m.getHeight() << ' ' << m.getWidth() << '\n';
     for (size_t i = 0; i < m.getHeight(); ++i) {
       for (size_t j = 0; j < m.getWidth(); ++j) {
-        //os.width(3);
         os << m(i,j) << ' ';
       }
       os << '\n';
@@ -412,20 +344,7 @@ public:
   }
 
 
-private:
-
-  // Returns true if filename /p source has extension /p ext.
-  // Precondition: ext must start with '.'
-  static bool fileNameHasExtension(const std::string &source,
-                                   const std::string &ext) {
-    assert(ext.length() > 0 && "Extension is empty!");
-    assert(ext[0] == '.' && "Extension must start with '.' !");
-    // source must represent a valid (non-empty) file name.
-    // So at least 1 character + ext.
-    if (source.length() < ext.length() + 1)
-      return false;
-    return source.substr(source.length() - ext.length(), ext.length()) == ext;
-  }
+protected:
 
   size_t Height;
   size_t Width;
