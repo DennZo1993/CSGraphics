@@ -20,13 +20,13 @@ RGBImage FileImageRetriever::GetImage() const {
   unsigned width = 0, height = 0;
 
   if (lodepng::load_file(png, fileName))
-    throw std::runtime_error("Error loaing PNG file " + fileName);
+    throw std::runtime_error("Error loading PNG file " + fileName);
   if (lodepng::decode(image, width, height, png))
     throw std::runtime_error("Error decoding PNG file " + fileName);
 
-  result.Allocate(height, width);
+  result.Resize(height, width);
 
-  for (size_t i = 0; i < height * width; ++i) {
+  for (size_t i = 0; i < result.getSize(); ++i) {
     auto r = image[4 * i + 0];
     auto g = image[4 * i + 1];
     auto b = image[4 * i + 2];
