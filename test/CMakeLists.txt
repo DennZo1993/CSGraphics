@@ -75,7 +75,8 @@ endif()
 SET(TEST_SOURCES main.cpp
                  RGBAPixel.cpp
                  ImageTest.cpp
-                 ImageRetriever/FileImageRetrieverTest.cpp)
+                 ImageRetriever/FileImageRetrieverTest.cpp
+                 ImageProcessing/GrayScale.cpp)
 
 ADD_EXECUTABLE(Tests ${TEST_SOURCES})
 
