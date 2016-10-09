@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RGBImage.h"
+#include "ImageTypes.h"
 
 
 // Simple image retriever interface.
