@@ -189,23 +189,31 @@ public:
 
 
   // Throws std::invalid_argument.
-  friend Image<PixelType> operator+(Image<PixelType> lhs, const Image<PixelType> &rhs) {
+  friend Image<PixelType> operator+(Image<PixelType> lhs,
+                                    const Image<PixelType> &rhs) {
     lhs += rhs;
     return lhs;
   }
 
 
   // Throws std::invalid_argument.
-  friend Image<PixelType> operator-(Image<PixelType> lhs, const Image<PixelType> &rhs) {
+  friend Image<PixelType> operator-(Image<PixelType> lhs,
+                                    const Image<PixelType> &rhs) {
     lhs -= rhs;
     return lhs;
   }
 
 
 protected:
-
   size_t Height;
   size_t Width;
   std::vector<PixelType> data;
+
+
+public:
+  auto begin()       -> decltype(data.begin()) { return data.begin(); }
+  auto begin() const -> decltype(data.begin()) { return data.begin(); }
+  auto end()         -> decltype(data.end())   { return data.end();   }
+  auto end()   const -> decltype(data.end())   { return data.end();   }
 };
 
