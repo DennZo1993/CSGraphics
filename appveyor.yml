@@ -46,7 +46,7 @@ build_script:
 
 test_script:
 - ps: |
-    & ctest -C $env:CONFIGURATION --output-on-failure
+    & ctest -C $env:CONFIGURATION --verbose --output-on-failure
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
     }
