@@ -105,10 +105,6 @@ public:
   }
 
 
-  PixelType& operator[](size_t i) { return data.at(i); }
-  const PixelType& operator[](size_t i) const { return data.at(i); }
-
-
   inline size_t getHeight() const { return Height; }
   inline size_t getWidth()  const { return Width;  }
   inline size_t getSize()   const {
@@ -212,6 +208,9 @@ protected:
 
 
 public:
+  auto operator[](size_t i)       -> decltype(data.at(i)) { return data.at(i); }
+  auto operator[](size_t i) const -> decltype(data.at(i)) { return data.at(i); }
+
   auto begin()       -> decltype(data.begin()) { return data.begin(); }
   auto begin() const -> decltype(data.begin()) { return data.begin(); }
   auto end()         -> decltype(data.end())   { return data.end();   }

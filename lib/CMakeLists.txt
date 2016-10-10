@@ -1,7 +1,8 @@
 set (SOURCES lodepng/lodepng.cpp
              RGBAPixel.cpp
              FileImageRetriever.cpp
-             ImageProcessing.cpp)
+             ImageProcessing.cpp
+             ImageIO.cpp)
 
 add_library(libSolver STATIC ${SOURCES})
 
