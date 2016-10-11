@@ -82,12 +82,10 @@ public:
   // Throws std::out_of_range.
   T& operator()(size_t i, size_t j) {
     if (i >= Height)
-      throw std::out_of_range("i (" + std::to_string(i) +
-                              ") is greater than height (" +
+      throw std::out_of_range("i (" + std::to_string(i) + ") >= height (" +
                               std::to_string(Height) + ")");
     if (j >= Width)
-      throw std::out_of_range("j (" + std::to_string(j) +
-                              ") is greater than width (" +
+      throw std::out_of_range("j (" + std::to_string(j) + ") >= width (" +
                               std::to_string(Width) + ")");
     return data[i * Width + j];
   }

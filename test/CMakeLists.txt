@@ -77,6 +77,7 @@ SET(TEST_SOURCES main.cpp
                  ImageTest.cpp
                  ImageRetriever/FileImageRetrieverTest.cpp
                  ImageProcessing/GrayScale.cpp
+                 ImageProcessing/IntegralImage.cpp
                  ImageIO.cpp)
 
 ADD_EXECUTABLE(Tests ${TEST_SOURCES})
