@@ -2,6 +2,17 @@
 #include "ImageProcessing.h"
 
 
+TEST(GrayScaleImage, EmptyImage) {
+  RGBImage rgb;
+  GrayScaleImage gray = RGBToGray(rgb);
+
+  ASSERT_EQ(0, gray.getHeight());
+  ASSERT_EQ(0, gray.getWidth());
+  ASSERT_EQ(0, gray.getSize());
+  ASSERT_TRUE(gray.isEmpty());
+}
+
+
 TEST(GrayScaleImage, RedToGray) {
   // Red pixels to gray scale.
   RGBImage rgb(4, 5, RGBAPixel(100,0,0));
