@@ -7,23 +7,24 @@
 #include <string>
 
 
-template <class PixelType>
+template <class T>
 class Image {
 public:
+  using PixelType = T;
 
   Image() : Height(0), Width(0), data() {}
 
   // Creates a new image and fills it with \p value.
-  Image(size_t h, size_t w, const PixelType &value = PixelType())
+  Image(size_t h, size_t w, const T &value = T())
     : Height(h), Width(w), data(h * w, value) {}
 
-  Image(const Image<PixelType> &other) = default;
-  Image(Image<PixelType> &&other) = default;
+  Image(const Image<T> &other) = default;
+  Image(Image<T> &&other) = default;
 
   virtual ~Image() = default;
 
 
-  void Resize(size_t h, size_t w, const PixelType &value = PixelType()) {
+  void Resize(size_t h, size_t w, const T &value = T()) {
     Height = h;
     Width = w;
     data.resize(Height * Width, value);
@@ -31,7 +32,7 @@ public:
 
 
   // Fill the whole image with the given value.
-  void Fill(const PixelType &value) {
+  void Fill(const T &value) {
     for (auto &pixel : data)
       pixel = value;
   }
@@ -45,7 +46,7 @@ public:
   //   * <height>*<width> values separated by a whitespace.
   //
   // Throws sts::bad_alloc, std::invalid_argument, std ios exceptions.
-  friend std::istream &operator>>(std::istream &is, Image<PixelType> &m) {
+  friend std::istream &operator>>(std::istream &is, Image<T> &m) {
     std::ios_base::sync_with_stdio(false);
     is.exceptions(std::ios_base::failbit | std::ios_base::badbit);
 
@@ -63,7 +64,7 @@ public:
   }
 
 
-  friend std::ostream &operator<<(std::ostream &os, const Image<PixelType> &m) {
+  friend std::ostream &operator<<(std::ostream &os, const Image<T> &m) {
     std::ios_base::sync_with_stdio(false);
     os.exceptions(std::ios_base::failbit | std::ios_base::badbit);
 
@@ -79,7 +80,7 @@ public:
 
 
   // Throws std::out_of_range.
-  PixelType& operator()(size_t i, size_t j) {
+  T& operator()(size_t i, size_t j) {
     if (i >= Height)
       throw std::out_of_range("i (" + std::to_string(i) +
                               ") is greater than height (" +
@@ -92,7 +93,7 @@ public:
   }
 
 
-  const PixelType& operator()(size_t i, size_t j) const {
+  const T& operator()(size_t i, size_t j) const {
     if (i >= Height)
       throw std::out_of_range("i (" + std::to_string(i) +
                               ") is greater than height (" +
@@ -117,13 +118,13 @@ public:
   inline bool isEmpty() const { return data.empty(); }
 
 
-  Image<PixelType> &operator=(Image<PixelType> other) {
+  Image<T> &operator=(Image<T> other) {
     swap(*this, other);
     return *this;
   }
 
 
-  friend void swap(Image<PixelType> &first, Image<PixelType> &second) {
+  friend void swap(Image<T> &first, Image<T> &second) {
     using std::swap;
     swap(first.Height, second.Height);
     swap(first.Width, second.Width);
@@ -142,7 +143,7 @@ public:
   }
 
 
-  bool operator==(const Image<PixelType> &other) const {
+  bool operator==(const Image<T> &other) const {
     // Not actually needed check, but let's make this explicit for readability.
     if (isEmpty() != other.isEmpty())
       return false;
@@ -156,13 +157,13 @@ public:
   }
 
 
-  bool operator!=(const Image<PixelType> &other) const {
+  bool operator!=(const Image<T> &other) const {
     return !(*this == other);
   }
 
 
   // Throws std::invalid_argument.
-  Image<PixelType> &operator+=(const Image<PixelType> &other) {
+  Image<T> &operator+=(const Image<T> &other) {
     if (Height != other.getHeight() || Width != other.getWidth())
       throw std::invalid_argument("Image size mismatch in += operation!");
 
@@ -174,7 +175,7 @@ public:
 
 
   // Throws std::invalid_argument.
-  Image<PixelType> &operator-=(const Image<PixelType> &other) {
+  Image<T> &operator-=(const Image<T> &other) {
     if (Height != other.getHeight() || Width != other.getWidth())
       throw std::invalid_argument("Image size mismatch in -= operation!");
 
@@ -186,16 +187,14 @@ public:
 
 
   // Throws std::invalid_argument.
-  friend Image<PixelType> operator+(Image<PixelType> lhs,
-                                    const Image<PixelType> &rhs) {
+  friend Image<T> operator+(Image<T> lhs, const Image<T> &rhs) {
     lhs += rhs;
     return lhs;
   }
 
 
   // Throws std::invalid_argument.
-  friend Image<PixelType> operator-(Image<PixelType> lhs,
-                                    const Image<PixelType> &rhs) {
+  friend Image<T> operator-(Image<T> lhs, const Image<T> &rhs) {
     lhs -= rhs;
     return lhs;
   }
@@ -204,7 +203,7 @@ public:
 protected:
   size_t Height;
   size_t Width;
-  std::vector<PixelType> data;
+  std::vector<T> data;
 
 
 public:
