@@ -79,31 +79,6 @@ public:
   }
 
 
-  // Throws std::out_of_range.
-  T& operator()(size_t i, size_t j) {
-    if (i >= Height)
-      throw std::out_of_range("i (" + std::to_string(i) + ") >= height (" +
-                              std::to_string(Height) + ")");
-    if (j >= Width)
-      throw std::out_of_range("j (" + std::to_string(j) + ") >= width (" +
-                              std::to_string(Width) + ")");
-    return data[i * Width + j];
-  }
-
-
-  const T& operator()(size_t i, size_t j) const {
-    if (i >= Height)
-      throw std::out_of_range("i (" + std::to_string(i) +
-                              ") is greater than height (" +
-                              std::to_string(Height) + ")");
-    if (j >= Width)
-      throw std::out_of_range("j (" + std::to_string(j) +
-                              ") is greater than width (" +
-                              std::to_string(Width) + ")");
-    return data[i * Width + j];
-  }
-
-
   inline size_t getHeight() const { return Height; }
   inline size_t getWidth()  const { return Width;  }
   inline size_t getSize()   const {
@@ -205,6 +180,31 @@ protected:
 
 
 public:
+  // Throws std::out_of_range.
+  auto operator()(size_t i, size_t j) -> decltype(data[0]) {
+    if (i >= Height)
+      throw std::out_of_range("i (" + std::to_string(i) + ") >= height (" +
+                              std::to_string(Height) + ")");
+    if (j >= Width)
+      throw std::out_of_range("j (" + std::to_string(j) + ") >= width (" +
+                              std::to_string(Width) + ")");
+    return data[i * Width + j];
+  }
+
+
+  auto operator()(size_t i, size_t j) const -> decltype(data[0]) {
+    if (i >= Height)
+      throw std::out_of_range("i (" + std::to_string(i) +
+                              ") is greater than height (" +
+                              std::to_string(Height) + ")");
+    if (j >= Width)
+      throw std::out_of_range("j (" + std::to_string(j) +
+                              ") is greater than width (" +
+                              std::to_string(Width) + ")");
+    return data[i * Width + j];
+  }
+
+
   auto operator[](size_t i)       -> decltype(data.at(i)) { return data.at(i); }
   auto operator[](size_t i) const -> decltype(data.at(i)) { return data.at(i); }
 
